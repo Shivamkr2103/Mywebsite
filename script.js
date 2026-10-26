@@ -1,53 +1,57 @@
 document.addEventListener("DOMContentLoaded", () => {
-  "use strict";
+  const $ = (selector, parent = document) =>
+    parent.querySelector(selector);
 
-  const $ = (selector, root = document) =>
-    root.querySelector(selector);
-
-  const $$ = (selector, root = document) =>
-    [...root.querySelectorAll(selector)];
+  const $$ = (selector, parent = document) =>
+    [...parent.querySelectorAll(selector)];
 
   const reducedMotion = window.matchMedia(
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
-  // 1. MOBILE NAVIGATION
+  // Footer year
+  const year = $("#year");
+
+  if (year) {
+    year.textContent = new Date().getFullYear();
+  }
+
+  // Mobile navigation
   const menuToggle = $(".menu-toggle");
-  const navLinks = $(".nav-links");
+  const navLinks = $("#navLinks");
 
   function closeMenu() {
     if (!menuToggle || !navLinks) return;
 
     navLinks.classList.remove("open");
     menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Open navigation");
-    menuToggle.textContent = "☰";
+    document.body.classList.remove("menu-open");
   }
 
   if (menuToggle && navLinks) {
     menuToggle.setAttribute("aria-expanded", "false");
-    menuToggle.setAttribute("aria-label", "Open navigation");
 
     menuToggle.addEventListener("click", () => {
       const isOpen = navLinks.classList.toggle("open");
 
       menuToggle.setAttribute("aria-expanded", String(isOpen));
-      menuToggle.setAttribute(
-        "aria-label",
-        isOpen ? "Close navigation" : "Open navigation"
-      );
-      menuToggle.textContent = isOpen ? "×" : "☰";
+      document.body.classList.toggle("menu-open", isOpen);
     });
 
-    $$(".nav-links a").forEach(link => {
+    // Close after selecting a navigation link
+    $$("#navLinks a").forEach((link) => {
       link.addEventListener("click", closeMenu);
     });
 
-    document.addEventListener("keydown", event => {
-      if (event.key === "Escape") closeMenu();
+    // Close with Escape
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape") {
+        closeMenu();
+      }
     });
 
-    document.addEventListener("click", event => {
+    // Close when clicking outside the navigation
+    document.addEventListener("click", (event) => {
       if (
         navLinks.classList.contains("open") &&
         !navLinks.contains(event.target) &&
@@ -56,46 +60,60 @@ document.addEventListener("DOMContentLoaded", () => {
         closeMenu();
       }
     });
+
+    // Close the mobile menu when returning to desktop width
+    window.addEventListener("resize", () => {
+      if (window.innerWidth > 680) {
+        closeMenu();
+      }
+    });
   }
 
-  // 2. SCROLL REVEAL ANIMATIONS
+  // Scroll reveal animations
   const revealElements = $$(".reveal");
 
   if ("IntersectionObserver" in window && !reducedMotion) {
     const revealObserver = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
+      (entries, observer) => {
+        entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
-            revealObserver.unobserve(entry.target);
+            observer.unobserve(entry.target);
           }
         });
       },
-      { threshold: 0.12 }
+      {
+        threshold: 0.12,
+        rootMargin: "0px 0px -35px 0px"
+      }
     );
 
-    revealElements.forEach(element => {
+    revealElements.forEach((element) => {
       revealObserver.observe(element);
     });
   } else {
-    revealElements.forEach(element => {
+    revealElements.forEach((element) => {
       element.classList.add("visible");
     });
   }
 
-  // 3. ACTIVE NAVIGATION LINK
-  const sections = $$("section[id]");
-  const navItems = $$(".nav-links a[href^='#']");
+  // Active navigation link based on visible section
+  const sections = $$("main section[id]");
+  const navigationAnchors = $$("#navLinks a[href^='#']");
 
   if ("IntersectionObserver" in window && sections.length) {
     const sectionObserver = new IntersectionObserver(
-      entries => {
-        entries.forEach(entry => {
+      (entries) => {
+        entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
 
-          navItems.forEach(link => {
+          const sectionId = entry.target.id;
+
+          navigationAnchors.forEach((link) => {
             const isActive =
-              link.getAttribute("href") === `#${entry.target.id}`;
+              link.getAttribute("href") === `#${sectionId}`;
+
+            link.classList.toggle("active", isActive);
 
             if (isActive) {
               link.setAttribute("aria-current", "location");
@@ -105,135 +123,170 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         });
       },
-      { rootMargin: "-25% 0px -60% 0px" }
+      {
+        rootMargin: "-30% 0px -55% 0px",
+        threshold: 0
+      }
     );
 
-    sections.forEach(section => {
+    sections.forEach((section) => {
       sectionObserver.observe(section);
     });
   }
 
-  // 4. AUTOMATIC COPYRIGHT YEAR
-  const yearElement = $("#year");
+  // Back-to-top button
+  let backToTop = $(".back-top");
 
-  if (yearElement) {
-    yearElement.textContent = new Date().getFullYear();
+  // Create the button if it is not already in index.html
+  if (!backToTop) {
+    backToTop = document.createElement("button");
+    backToTop.className = "back-top";
+    backToTop.type = "button";
+    backToTop.setAttribute("aria-label", "Back to top");
+    backToTop.textContent = "↑";
+    document.body.appendChild(backToTop);
   }
 
-  // 5. CONTACT FORM VALIDATION
-  const form = $("#contactForm");
-  const status = $("#formStatus");
+  function updateBackToTop() {
+    backToTop.classList.toggle("show", window.scrollY > 450);
+  }
 
-  if (form) {
-    const fields = {
-      name: $("#name", form),
-      email: $("#email", form),
-      message: $("#message", form)
-    };
+  window.addEventListener("scroll", updateBackToTop, {
+    passive: true
+  });
 
-    const errors = {
-      name: $("#nameError"),
-      email: $("#emailError"),
-      message: $("#messageError")
-    };
+  updateBackToTop();
 
-    function validateForm() {
-      let valid = true;
+  backToTop.addEventListener("click", () => {
+    window.scrollTo({
+      top: 0,
+      behavior: reducedMotion ? "auto" : "smooth"
+    });
+  });
 
-      Object.values(errors).forEach(error => {
-        if (error) error.textContent = "";
-      });
+  // Contact form validation
+  const contactForm = $("#contactForm");
 
-      Object.values(fields).forEach(field => {
-        if (field) field.removeAttribute("aria-invalid");
-      });
+  if (contactForm) {
+    const nameInput = $("#name", contactForm);
+    const emailInput = $("#email", contactForm);
+    const messageInput = $("#message", contactForm);
 
-      const name = fields.name?.value.trim() || "";
-      const email = fields.email?.value.trim() || "";
-      const message = fields.message?.value.trim() || "";
+    const nameError = $("#nameError");
+    const emailError = $("#emailError");
+    const messageError = $("#messageError");
+    const formStatus = $("#formStatus");
 
-      function setError(field, errorElement, text) {
-        if (errorElement) errorElement.textContent = text;
+    const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-        if (field) {
-          field.setAttribute("aria-invalid", "true");
-          if (valid) field.focus();
-        }
-
-        valid = false;
+    function showError(input, errorElement, message) {
+      if (errorElement) {
+        errorElement.textContent = message;
       }
 
-      if (!fields.name || name.length < 2) {
-        setError(
-          fields.name,
-          errors.name,
-          "Please enter at least 2 characters."
+      if (input) {
+        input.setAttribute(
+          "aria-invalid",
+          message ? "true" : "false"
         );
       }
+    }
 
-      if (
-        !fields.email ||
-        !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
-      ) {
-        setError(
-          fields.email,
-          errors.email,
-          "Please enter a valid email address."
-        );
-      }
+    function validateName() {
+      const value = nameInput?.value.trim() || "";
+      const valid = value.length >= 2;
 
-      if (!fields.message || message.length < 10) {
-        setError(
-          fields.message,
-          errors.message,
-          "Please enter at least 10 characters."
-        );
-      }
+      showError(
+        nameInput,
+        nameError,
+        valid ? "" : "Please enter your name (at least 2 characters)."
+      );
 
       return valid;
     }
 
-    Object.values(fields).forEach(field => {
-      if (!field) return;
+    function validateEmail() {
+      const value = emailInput?.value.trim() || "";
+      const valid = emailPattern.test(value);
 
-      field.addEventListener("input", () => {
-        field.removeAttribute("aria-invalid");
-      });
-    });
+      showError(
+        emailInput,
+        emailError,
+        valid ? "" : "Please enter a valid email address."
+      );
 
-    form.addEventListener("submit", event => {
+      return valid;
+    }
+
+    function validateMessage() {
+      const value = messageInput?.value.trim() || "";
+      const valid = value.length >= 10;
+
+      showError(
+        messageInput,
+        messageError,
+        valid ? "" : "Please enter at least 10 characters."
+      );
+
+      return valid;
+    }
+
+    // Validate fields as the visitor types
+    nameInput?.addEventListener("input", validateName);
+    emailInput?.addEventListener("input", validateEmail);
+    messageInput?.addEventListener("input", validateMessage);
+
+    contactForm.addEventListener("submit", (event) => {
       event.preventDefault();
 
-      if (!validateForm()) {
-        if (status) {
-          status.textContent =
-            "Please fix the highlighted fields and try again.";
+      if (formStatus) {
+        formStatus.textContent = "";
+      }
+
+      const isNameValid = validateName();
+      const isEmailValid = validateEmail();
+      const isMessageValid = validateMessage();
+
+      if (!isNameValid || !isEmailValid || !isMessageValid) {
+        if (!isNameValid) {
+          nameInput?.focus();
+        } else if (!isEmailValid) {
+          emailInput?.focus();
+        } else {
+          messageInput?.focus();
         }
+
+        if (formStatus) {
+          formStatus.textContent =
+            "Please correct the highlighted fields.";
+        }
+
         return;
       }
 
-      // Keep your existing recipient address.
       const recipient = "Shivamkr2103@gmail.com";
+      const name = nameInput.value.trim();
+      const email = emailInput.value.trim();
+      const message = messageInput.value.trim();
 
       const subject = encodeURIComponent(
-        `Portfolio contact from ${fields.name.value.trim()}`
+        `Portfolio enquiry from ${name}`
       );
 
       const body = encodeURIComponent(
-        `Name: ${fields.name.value.trim()}\n` +
-        `Reply to: ${fields.email.value.trim()}\n\n` +
-        `Message:\n${fields.message.value.trim()}`
+        `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
       );
 
-      if (status) {
-        status.textContent =
-          "Opening your email app. Send the message from there.";
+      const mailtoLink =
+        `mailto:${recipient}?subject=${subject}&body=${body}`;
+
+      if (formStatus) {
+        formStatus.textContent =
+          "Opening your email app. Please send the prepared message there.";
       }
 
-      window.location.href =
-        `mailto:${recipient}?subject=${subject}&body=${body}`;
+      // Opens the visitor's configured email application
+      window.location.href = mailtoLink;
     });
   }
-
-  console.info("Portfolio initialized successfully.");
 });
