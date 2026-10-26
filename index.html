@@ -1,65 +1,371 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Shivam Kumar — beginner full-stack developer portfolio." />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0b12">
+
+  <meta name="description" content="Shivam Kumar's developer portfolio showcasing skills, projects, and web development experience.">
+
   <title>Shivam Kumar | Developer Portfolio</title>
+
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+
+  <link rel="stylesheet" href="style.css">
   <script src="script.js" defer></script>
 </head>
+
 <body>
-  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
+
+  <!-- Background effects -->
+  <div class="ambient" aria-hidden="true"></div>
+
+  <!-- Navigation -->
   <header class="site-header">
-    <a class="brand" href="#home" aria-label="Shivam Kumar home"><span class="brand-mark">S</span><span>shivam<span class="accent">.dev</span></span></a>
-    <button class="menu-toggle" aria-label="Open navigation" aria-expanded="false">☰</button>
-    <nav class="nav-links" aria-label="Main navigation">
-      <a href="#about">About</a><a href="#skills">Skills</a><a href="#projects">Projects</a><a href="#contact" class="nav-cta">Let's talk <span>↗</span></a>
+    <nav class="navbar" aria-label="Main navigation">
+      <a href="#home" class="brand" aria-label="Shivam Kumar home">
+        Shivam<span class="gradient-text">.dev</span>
+      </a>
+
+      <button
+        class="menu-toggle"
+        type="button"
+        aria-label="Open navigation"
+        aria-expanded="false"
+        aria-controls="navLinks">
+        ☰
+      </button>
+
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
     </nav>
   </header>
 
   <main>
-    <section class="hero section" id="home">
-      <div class="hero-copy reveal">
-        <div class="availability"><span class="status-dot"></span> OPEN TO LEARNING & OPPORTUNITIES</div>
-        <p class="eyebrow">HELLO, I'M SHIVAM KUMAR</p>
-        <h1>I build things for<br>the <span class="gradient-text">digital world.</span></h1>
-        <p class="hero-description">A curious developer in the making, turning ideas into clean, useful and thoughtful web experiences — one project at a time.</p>
-        <div class="hero-actions"><a class="button button-primary" href="#projects">Explore my work <span>↘</span></a><a class="button button-ghost" href="#contact">Get in touch</a></div>
-        <div class="hero-meta"><span><strong>01+</strong> Projects in progress</span><i></i><span><strong>Always</strong> Learning</span></div>
+
+    <!-- Hero -->
+    <section class="section hero" id="home">
+      <div class="hero-content reveal">
+        <p class="eyebrow">
+          <span class="status-dot"></span>
+          Aspiring Developer · Always Learning
+        </p>
+
+        <h1>
+          Hi, I'm <span class="gradient-text">Shivam Kumar</span>
+          <br>
+          I build digital experiences.
+        </h1>
+
+        <p class="hero-description">
+          I'm a developer interested in web development, programming,
+          and data science. I enjoy turning ideas into useful,
+          responsive, and creative digital projects.
+        </p>
+
+        <div class="hero-actions">
+          <a href="#projects" class="button button-primary">
+            Explore Projects ↗
+          </a>
+
+          <a href="#contact" class="button button-ghost">
+            Let's Connect
+          </a>
+        </div>
+
+        <div class="social-links">
+          <a href="https://github.com/" target="_blank"
+             rel="noopener noreferrer">GitHub ↗</a>
+          <a href="https://www.linkedin.com/" target="_blank"
+             rel="noopener noreferrer">LinkedIn ↗</a>
+        </div>
       </div>
-      <div class="hero-art reveal" aria-label="Decorative developer illustration">
-        <div class="orbit orbit-a"></div><div class="orbit orbit-b"></div>
-        <div class="floating-chip chip-top">✦ &nbsp; curious mind</div>
-        <div class="code-window"><div class="window-bar"><span></span><span></span><span></span><b>developer.js</b></div><div class="code-lines"><p><span class="line-no">01</span> <span class="pink">const</span> developer = {</p><p><span class="line-no">02</span> &nbsp; name: <span class="green">'Shivam'</span>,</p><p><span class="line-no">03</span> &nbsp; focus: <span class="green">'Web Development'</span>,</p><p><span class="line-no">04</span> &nbsp; mindset: <span class="green">'Keep learning'</span>,</p><p><span class="line-no">05</span> &nbsp; build: () <span class="pink">=&gt;</span> <span class="blue">'Something great'</span></p><p><span class="line-no">06</span> };</p><p class="cursor-line"><span class="line-no">07</span> <span class="cursor">▍</span></p></div></div>
-        <div class="floating-chip chip-bottom"><span class="sparkle">✳</span> building the next idea</div>
-        <div class="hero-orb"><span>&lt;/&gt;</span></div>
+
+      <div class="hero-art reveal" aria-label="Developer code illustration">
+        <div class="orbit orbit-one"></div>
+        <div class="orbit orbit-two"></div>
+
+        <div class="code-window">
+          <div class="window-header">
+            <span></span><span></span><span></span>
+            <p>developer.js</p>
+          </div>
+
+          <div class="code-content">
+            <p><span class="code-purple">const</span> developer = {</p>
+            <p>&nbsp;&nbsp;name: <span class="code-green">"Shivam"</span>,</p>
+            <p>&nbsp;&nbsp;role: <span class="code-green">"Developer"</span>,</p>
+            <p>&nbsp;&nbsp;learning: <span class="code-green">true</span>,</p>
+            <p>&nbsp;&nbsp;skills: [</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-orange">"HTML"</span>,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-orange">"CSS"</span>,</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;<span class="code-orange">"JavaScript"</span></p>
+            <p>&nbsp;&nbsp;]</p>
+            <p>};</p>
+            <p class="code-comment">// Building something new...</p>
+          </div>
+        </div>
+
+        <div class="floating-chip chip-one">✦ Creative</div>
+        <div class="floating-chip chip-two">{"</>"} Coding</div>
       </div>
-      <a class="scroll-cue" href="#about"><span class="scroll-line"></span> SCROLL TO EXPLORE</a>
     </section>
 
-    <section class="section about-section" id="about">
-      <div class="section-heading reveal"><p class="eyebrow">A LITTLE ABOUT ME</p><h2>Good ideas deserve<br><span class="gradient-text">great execution.</span></h2></div>
-      <div class="about-grid"><div class="about-note reveal"><span class="quote-mark">“</span><p>I enjoy understanding how things work and using technology to solve real problems. Right now, I’m strengthening my foundations in web development, programming and data-driven projects.</p><p class="muted">My approach is simple: stay curious, keep experimenting, and make every project a little better than the last.</p></div><div class="about-stats reveal"><div class="stat-card"><span class="stat-icon">⌘</span><strong>Build</strong><p>Turn concepts into working projects.</p></div><div class="stat-card"><span class="stat-icon">↗</span><strong>Improve</strong><p>Learn from feedback and iteration.</p></div><div class="stat-card"><span class="stat-icon">◎</span><strong>Explore</strong><p>Stay curious about new technology.</p></div></div></div>
+    <!-- About -->
+    <section class="section" id="about">
+      <div class="section-heading reveal">
+        <p class="eyebrow">GET TO KNOW ME</p>
+        <h2>About <span class="gradient-text">Me</span></h2>
+        <p>Curiosity drives me. Building projects helps me grow.</p>
+      </div>
+
+      <div class="about-grid">
+        <div class="about-card reveal">
+          <h3>A little about me</h3>
+          <p>
+            I'm an engineering student developing my skills in programming,
+            web technologies, and data science. I enjoy learning by building
+            projects and solving practical problems.
+          </p>
+          <p>
+            My goal is to keep improving, collaborate with others,
+            and create technology that is useful and easy to use.
+          </p>
+          <a href="#contact" class="text-link">Get in touch ↗</a>
+        </div>
+
+        <div class="about-card about-highlight reveal">
+          <span class="highlight-icon">✦</span>
+          <h3>My approach</h3>
+          <p>
+            Learn the fundamentals, build consistently, understand mistakes,
+            and improve one project at a time.
+          </p>
+          <div class="mini-tags">
+            <span>Problem Solving</span>
+            <span>Continuous Learning</span>
+            <span>Creativity</span>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <section class="section" id="skills"><div class="section-heading reveal"><p class="eyebrow">MY TOOLKIT</p><h2>Learning by <span class="gradient-text">building.</span></h2><p class="section-intro">Tools and technologies I use or am currently learning.</p></div>
-      <div class="skills-grid reveal"><div class="skill-card"><span class="skill-symbol orange">5</span><div><h3>HTML5</h3><p>Accessible page structure</p></div><span class="skill-level">FOUNDATION</span></div><div class="skill-card"><span class="skill-symbol blue-symbol">✳</span><div><h3>CSS3</h3><p>Responsive layouts & styling</p></div><span class="skill-level">FOUNDATION</span></div><div class="skill-card"><span class="skill-symbol yellow">JS</span><div><h3>JavaScript</h3><p>Interactivity & logic</p></div><span class="skill-level">LEARNING</span></div><div class="skill-card"><span class="skill-symbol cyan">⌘</span><div><h3>Git & GitHub</h3><p>Version control & collaboration</p></div><span class="skill-level">LEARNING</span></div><div class="skill-card"><span class="skill-symbol purple">Py</span><div><h3>Python</h3><p>Programming & data analysis</p></div><span class="skill-level">LEARNING</span></div><div class="skill-card"><span class="skill-symbol green-symbol">▤</span><div><h3>Responsive Design</h3><p>Mobile-first experiences</p></div><span class="skill-level">PRACTICING</span></div></div>
+    <!-- Skills -->
+    <section class="section" id="skills">
+      <div class="section-heading reveal">
+        <p class="eyebrow">WHAT I WORK WITH</p>
+        <h2>My <span class="gradient-text">Skills</span></h2>
+        <p>Technologies and tools I'm learning and using.</p>
+      </div>
+
+      <div class="skills-grid">
+        <article class="skill-card reveal">
+          <div class="skill-icon">⌨️</div>
+          <h3>Programming</h3>
+          <p>C, C++, Python, JavaScript</p>
+        </article>
+
+        <article class="skill-card reveal">
+          <div class="skill-icon">🌐</div>
+          <h3>Web Development</h3>
+          <p>HTML, CSS, responsive design</p>
+        </article>
+
+        <article class="skill-card reveal">
+          <div class="skill-icon">📊</div>
+          <h3>Data Science</h3>
+          <p>NumPy, Pandas, Matplotlib, scikit-learn</p>
+        </article>
+
+        <article class="skill-card reveal">
+          <div class="skill-icon">🛠️</div>
+          <h3>Tools</h3>
+          <p>Git, GitHub, VS Code, Google Colab</p>
+        </article>
+      </div>
     </section>
 
-    <section class="section projects-section" id="projects"><div class="section-heading reveal"><p class="eyebrow">SELECTED WORK</p><h2>Small steps.<br><span class="gradient-text">Real projects.</span></h2><p class="section-intro">A few projects that reflect what I'm exploring and learning.</p></div>
+    <!-- Projects -->
+    <section class="section" id="projects">
+      <div class="section-heading reveal">
+        <p class="eyebrow">THINGS I'VE BUILT</p>
+        <h2>Featured <span class="gradient-text">Projects</span></h2>
+        <p>A selection of my learning and development projects.</p>
+      </div>
+
       <div class="projects-grid">
-        <article class="project-card project-featured reveal"><div class="project-visual renewable-visual"><div class="visual-label">DATA / ANALYTICS</div><div class="sun"></div><div class="hill hill-back"></div><div class="hill hill-front"></div><div class="chart-bars"><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><span class="visual-caption">POWERING A BETTER FUTURE</span></div><div class="project-content"><div class="project-topline"><span>01 / DATA PROJECT</span><span class="project-arrow">↗</span></div><h3>Renewable Energy Adoption Analysis</h3><p>Exploring renewable energy data to identify patterns, compare adoption trends and communicate insights through analysis and visualisation.</p><div class="tag-list"><span>Python</span><span>Pandas</span><span>Data Visualisation</span></div><a class="text-link" href="#contact">Ask me about this project <span>↗</span></a></div></article>
-        <article class="project-card reveal"><div class="project-visual spam-visual"><div class="mail-card"><span class="mail-icon">✉</span><div class="mail-line long"></div><div class="mail-line"></div><div class="mail-line short"></div><span class="spam-badge">SPAM DETECTED</span></div><div class="visual-label">MACHINE LEARNING</div></div><div class="project-content"><div class="project-topline"><span>02 / ML PROJECT</span><span class="project-arrow">↗</span></div><h3>Email Spam Detection</h3><p>A machine-learning project exploring how text features can help classify messages as spam or legitimate email.</p><div class="tag-list"><span>Python</span><span>Scikit-learn</span><span>NLP Basics</span></div><a class="text-link" href="#contact">Ask me about this project <span>↗</span></a></div></article>
-        <article class="project-card reveal"><div class="project-visual web-visual"><div class="browser-card"><div class="browser-top"><i></i><i></i><i></i></div><div class="browser-content"><div class="browser-heading"></div><div class="browser-copy"></div><div class="browser-copy small"></div><div class="browser-button"></div><div class="browser-picture"></div></div></div><div class="visual-label">FRONTEND</div></div><div class="project-content"><div class="project-topline"><span>03 / WEB PROJECT</span><span class="project-arrow">↗</span></div><h3>Personal Portfolio Website</h3><p>A responsive portfolio built to present my skills, learning journey and projects with a clean visual style.</p><div class="tag-list"><span>HTML</span><span>CSS</span><span>JavaScript</span></div><a class="text-link" href="#home">You're viewing it <span>↗</span></a></div></article>
-      </div><p class="project-note">Project descriptions are summaries. Add your repository links and verified results before publishing.</p>
+
+        <article class="project-card reveal">
+          <div class="project-visual project-visual-one">
+            <span class="project-number">01</span>
+            <span class="project-symbol">⌘</span>
+            <span class="project-category">WEB DEVELOPMENT</span>
+          </div>
+
+          <div class="project-info">
+            <h3>Personal Portfolio</h3>
+            <p>
+              A responsive portfolio website featuring gradient visuals,
+              animations, and a contact form.
+            </p>
+            <div class="project-tags">
+              <span>HTML</span><span>CSS</span><span>JavaScript</span>
+            </div>
+            <a class="text-link"
+               href="https://github.com/"
+               target="_blank"
+               rel="noopener noreferrer">
+              View Source ↗
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-visual project-visual-two">
+            <span class="project-number">02</span>
+            <span class="project-symbol">◈</span>
+            <span class="project-category">DATA ANALYSIS</span>
+          </div>
+
+          <div class="project-info">
+            <h3>Renewable Energy Analysis</h3>
+            <p>
+              A data analysis project exploring renewable energy adoption
+              and patterns using a CSV dataset.
+            </p>
+            <div class="project-tags">
+              <span>Python</span><span>Pandas</span><span>Visualization</span>
+            </div>
+            <a class="text-link"
+               href="https://github.com/"
+               target="_blank"
+               rel="noopener noreferrer">
+              View Source ↗
+            </a>
+          </div>
+        </article>
+
+        <article class="project-card reveal">
+          <div class="project-visual project-visual-three">
+            <span class="project-number">03</span>
+            <span class="project-symbol">✉</span>
+            <span class="project-category">MACHINE LEARNING</span>
+          </div>
+
+          <div class="project-info">
+            <h3>Email Spam Detection</h3>
+            <p>
+              A machine learning project that classifies messages
+              as spam or legitimate using text features.
+            </p>
+            <div class="project-tags">
+              <span>Python</span><span>ML</span><span>scikit-learn</span>
+            </div>
+            <a class="text-link"
+               href="https://github.com/"
+               target="_blank"
+               rel="noopener noreferrer">
+              View Source ↗
+            </a>
+          </div>
+        </article>
+
+      </div>
     </section>
 
-    <section class="contact-section section" id="contact"><div class="contact-panel reveal"><div class="contact-copy"><p class="eyebrow">HAVE AN IDEA?</p><h2>Let's make<br><span class="gradient-text">something useful.</span></h2><p>Have a project idea, learning resource or opportunity to share? Send a message.</p><div class="contact-details"><span class="contact-icon">✉</span><span>Use the form to start a conversation</span></div></div><form class="contact-form" id="contactForm" novalidate><label for="name">Your name</label><input id="name" name="name" type="text" placeholder="e.g. Alex Kumar" minlength="2" required /><small class="error" id="nameError"></small><label for="email">Email address</label><input id="email" name="email" type="email" placeholder="you@example.com" required /><small class="error" id="emailError"></small><label for="message">What’s on your mind?</label><textarea id="message" name="message" rows="4" placeholder="Tell me a little about it..." minlength="10" required></textarea><small class="error" id="messageError"></small><button class="button button-primary submit-button" type="submit">Prepare email <span>↗</span></button><p class="form-hint" id="formStatus" aria-live="polite">This opens your email app; it doesn't send messages directly from this page.</p></form></div></section>
+    <!-- Contact -->
+    <section class="section" id="contact">
+      <div class="section-heading reveal">
+        <p class="eyebrow">LET'S TALK</p>
+        <h2>Get In <span class="gradient-text">Touch</span></h2>
+        <p>Have a project idea or want to connect? Send me a message.</p>
+      </div>
+
+      <div class="contact-panel reveal">
+        <div class="contact-copy">
+          <h3>Let's create something meaningful.</h3>
+          <p>
+            I'm open to connecting with fellow learners, developers,
+            and people with interesting project ideas.
+          </p>
+          <p class="contact-note">
+            Fill out the form and your default email application
+            will open with your message prepared.
+          </p>
+        </div>
+
+        <form id="contactForm" class="contact-form" novalidate>
+          <div class="form-group">
+            <label for="name">Your name</label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              placeholder="Enter your name"
+              autocomplete="name"
+              minlength="2"
+              required>
+            <small id="nameError" class="form-error"></small>
+          </div>
+
+          <div class="form-group">
+            <label for="email">Email address</label>
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="you@example.com"
+              autocomplete="email"
+              required>
+            <small id="emailError" class="form-error"></small>
+          </div>
+
+          <div class="form-group">
+            <label for="message">Your message</label>
+            <textarea
+              id="message"
+              name="message"
+              rows="5"
+              placeholder="Tell me about your idea..."
+              minlength="10"
+              required></textarea>
+            <small id="messageError" class="form-error"></small>
+          </div>
+
+          <button type="submit" class="button button-primary">
+            Prepare Message ↗
+          </button>
+
+          <p id="formStatus" class="form-status" role="status"
+             aria-live="polite"></p>
+        </form>
+      </div>
+    </section>
+
   </main>
-  <footer class="site-footer"><a class="brand" href="#home"><span class="brand-mark">S</span><span>shivam<span class="accent">.dev</span></span></a><p>Designed with curiosity. Built with code.</p><a class="back-top" href="#home">Back to top ↑</a><span class="copyright">© <span id="year"></span> Shivam Kumar</span></footer>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <a href="#home" class="brand">
+      Shivam<span class="gradient-text">.dev</span>
+    </a>
+
+    <p>Designed and built with curiosity by Shivam Kumar.</p>
+
+    <p class="copyright">
+      © <span id="year"></span> Shivam Kumar. All rights reserved.
+    </p>
+
+    <a href="#home" class="back-top" aria-label="Back to top">↑</a>
+  </footer>
+
 </body>
 </html>
