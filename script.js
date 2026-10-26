@@ -9,12 +9,9 @@ document.addEventListener("DOMContentLoaded", () => {
     "(prefers-reduced-motion: reduce)"
   ).matches;
 
-  // Footer year
+  // Automatically update the footer year
   const year = $("#year");
-
-  if (year) {
-    year.textContent = new Date().getFullYear();
-  }
+  if (year) year.textContent = new Date().getFullYear();
 
   // Mobile navigation
   const menuToggle = $(".menu-toggle");
@@ -25,33 +22,25 @@ document.addEventListener("DOMContentLoaded", () => {
 
     navLinks.classList.remove("open");
     menuToggle.setAttribute("aria-expanded", "false");
-    document.body.classList.remove("menu-open");
   }
 
   if (menuToggle && navLinks) {
     menuToggle.setAttribute("aria-expanded", "false");
 
     menuToggle.addEventListener("click", () => {
-      const isOpen = navLinks.classList.toggle("open");
-
-      menuToggle.setAttribute("aria-expanded", String(isOpen));
-      document.body.classList.toggle("menu-open", isOpen);
+      const open = navLinks.classList.toggle("open");
+      menuToggle.setAttribute("aria-expanded", String(open));
     });
 
-    // Close after selecting a navigation link
-    $$("#navLinks a").forEach((link) => {
+    $$("#navLinks a").forEach(link => {
       link.addEventListener("click", closeMenu);
     });
 
-    // Close with Escape
-    document.addEventListener("keydown", (event) => {
-      if (event.key === "Escape") {
-        closeMenu();
-      }
+    document.addEventListener("keydown", event => {
+      if (event.key === "Escape") closeMenu();
     });
 
-    // Close when clicking outside the navigation
-    document.addEventListener("click", (event) => {
+    document.addEventListener("click", event => {
       if (
         navLinks.classList.contains("open") &&
         !navLinks.contains(event.target) &&
@@ -61,61 +50,53 @@ document.addEventListener("DOMContentLoaded", () => {
       }
     });
 
-    // Close the mobile menu when returning to desktop width
     window.addEventListener("resize", () => {
-      if (window.innerWidth > 680) {
-        closeMenu();
-      }
+      if (window.innerWidth > 680) closeMenu();
     });
   }
 
-  // Scroll reveal animations
+  // Reveal sections and cards when scrolling
   const revealElements = $$(".reveal");
 
   if ("IntersectionObserver" in window && !reducedMotion) {
     const revealObserver = new IntersectionObserver(
       (entries, observer) => {
-        entries.forEach((entry) => {
+        entries.forEach(entry => {
           if (entry.isIntersecting) {
             entry.target.classList.add("visible");
             observer.unobserve(entry.target);
           }
         });
       },
-      {
-        threshold: 0.12,
-        rootMargin: "0px 0px -35px 0px"
-      }
+      { threshold: 0.12 }
     );
 
-    revealElements.forEach((element) => {
+    revealElements.forEach(element => {
       revealObserver.observe(element);
     });
   } else {
-    revealElements.forEach((element) => {
+    revealElements.forEach(element => {
       element.classList.add("visible");
     });
   }
 
-  // Active navigation link based on visible section
+  // Highlight the current navigation section
   const sections = $$("main section[id]");
-  const navigationAnchors = $$("#navLinks a[href^='#']");
+  const navItems = $$("#navLinks a[href^='#']");
 
-  if ("IntersectionObserver" in window && sections.length) {
+  if ("IntersectionObserver" in window) {
     const sectionObserver = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
+      entries => {
+        entries.forEach(entry => {
           if (!entry.isIntersecting) return;
 
-          const sectionId = entry.target.id;
+          navItems.forEach(link => {
+            const active =
+              link.getAttribute("href") === `#${entry.target.id}`;
 
-          navigationAnchors.forEach((link) => {
-            const isActive =
-              link.getAttribute("href") === `#${sectionId}`;
+            link.classList.toggle("active", active);
 
-            link.classList.toggle("active", isActive);
-
-            if (isActive) {
+            if (active) {
               link.setAttribute("aria-current", "location");
             } else {
               link.removeAttribute("aria-current");
@@ -123,27 +104,21 @@ document.addEventListener("DOMContentLoaded", () => {
           });
         });
       },
-      {
-        rootMargin: "-30% 0px -55% 0px",
-        threshold: 0
-      }
+      { rootMargin: "-30% 0px -55% 0px" }
     );
 
-    sections.forEach((section) => {
-      sectionObserver.observe(section);
-    });
+    sections.forEach(section => sectionObserver.observe(section));
   }
 
   // Back-to-top button
   let backToTop = $(".back-top");
 
-  // Create the button if it is not already in index.html
   if (!backToTop) {
     backToTop = document.createElement("button");
     backToTop.className = "back-top";
     backToTop.type = "button";
-    backToTop.setAttribute("aria-label", "Back to top");
     backToTop.textContent = "↑";
+    backToTop.setAttribute("aria-label", "Back to top");
     document.body.appendChild(backToTop);
   }
 
@@ -165,12 +140,12 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   // Contact form validation
-  const contactForm = $("#contactForm");
+  const form = $("#contactForm");
 
-  if (contactForm) {
-    const nameInput = $("#name", contactForm);
-    const emailInput = $("#email", contactForm);
-    const messageInput = $("#message", contactForm);
+  if (form) {
+    const name = $("#name", form);
+    const email = $("#email", form);
+    const message = $("#message", form);
 
     const nameError = $("#nameError");
     const emailError = $("#emailError");
@@ -179,114 +154,94 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
-    function showError(input, errorElement, message) {
-      if (errorElement) {
-        errorElement.textContent = message;
-      }
+    function showError(input, element, text) {
+      if (element) element.textContent = text;
 
       if (input) {
-        input.setAttribute(
-          "aria-invalid",
-          message ? "true" : "false"
-        );
+        input.setAttribute("aria-invalid", String(Boolean(text)));
       }
     }
 
     function validateName() {
-      const value = nameInput?.value.trim() || "";
-      const valid = value.length >= 2;
+      const valid = (name?.value.trim().length || 0) >= 2;
 
       showError(
-        nameInput,
+        name,
         nameError,
-        valid ? "" : "Please enter your name (at least 2 characters)."
+        valid ? "" : "Enter your name (at least 2 characters)."
       );
 
       return valid;
     }
 
     function validateEmail() {
-      const value = emailInput?.value.trim() || "";
-      const valid = emailPattern.test(value);
+      const valid = emailPattern.test(email?.value.trim() || "");
 
       showError(
-        emailInput,
+        email,
         emailError,
-        valid ? "" : "Please enter a valid email address."
+        valid ? "" : "Enter a valid email address."
       );
 
       return valid;
     }
 
     function validateMessage() {
-      const value = messageInput?.value.trim() || "";
-      const valid = value.length >= 10;
+      const valid = (message?.value.trim().length || 0) >= 10;
 
       showError(
-        messageInput,
+        message,
         messageError,
-        valid ? "" : "Please enter at least 10 characters."
+        valid ? "" : "Message must contain at least 10 characters."
       );
 
       return valid;
     }
 
-    // Validate fields as the visitor types
-    nameInput?.addEventListener("input", validateName);
-    emailInput?.addEventListener("input", validateEmail);
-    messageInput?.addEventListener("input", validateMessage);
+    name?.addEventListener("input", validateName);
+    email?.addEventListener("input", validateEmail);
+    message?.addEventListener("input", validateMessage);
 
-    contactForm.addEventListener("submit", (event) => {
+    form.addEventListener("submit", event => {
       event.preventDefault();
 
-      if (formStatus) {
-        formStatus.textContent = "";
-      }
+      if (formStatus) formStatus.textContent = "";
 
-      const isNameValid = validateName();
-      const isEmailValid = validateEmail();
-      const isMessageValid = validateMessage();
+      const validName = validateName();
+      const validEmail = validateEmail();
+      const validMessage = validateMessage();
 
-      if (!isNameValid || !isEmailValid || !isMessageValid) {
-        if (!isNameValid) {
-          nameInput?.focus();
-        } else if (!isEmailValid) {
-          emailInput?.focus();
-        } else {
-          messageInput?.focus();
-        }
+      if (!validName || !validEmail || !validMessage) {
+        if (!validName) name?.focus();
+        else if (!validEmail) email?.focus();
+        else message?.focus();
 
         if (formStatus) {
-          formStatus.textContent =
-            "Please correct the highlighted fields.";
+          formStatus.textContent = "Please correct the highlighted fields.";
         }
 
         return;
       }
 
       const recipient = "Shivamkr2103@gmail.com";
-      const name = nameInput.value.trim();
-      const email = emailInput.value.trim();
-      const message = messageInput.value.trim();
 
       const subject = encodeURIComponent(
-        `Portfolio enquiry from ${name}`
+        `Portfolio enquiry from ${name.value.trim()}`
       );
 
       const body = encodeURIComponent(
-        `Name: ${name}\nEmail: ${email}\n\nMessage:\n${message}`
+        `Name: ${name.value.trim()}\n` +
+        `Email: ${email.value.trim()}\n\n` +
+        `Message:\n${message.value.trim()}`
       );
-
-      const mailtoLink =
-        `mailto:${recipient}?subject=${subject}&body=${body}`;
 
       if (formStatus) {
         formStatus.textContent =
           "Opening your email app. Please send the prepared message there.";
       }
 
-      // Opens the visitor's configured email application
-      window.location.href = mailtoLink;
+      window.location.href =
+        `mailto:${recipient}?subject=${subject}&body=${body}`;
     });
   }
 });
